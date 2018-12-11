@@ -53,25 +53,45 @@ for row in in_file:
 # higher numbers = more red, lower numbers = more blue 
 # now using the span and offset we can scale the 255 x 3 = 765 to this. 
 sf = 765 / float((int(max(id_list)) - int(min(id_list)))) 
-print "max value = " + str(max(id_list))
-print "min value = " + str(min(id_list))
-print "scale factor " + str(sf)
 
 for row in rows:
 	row_data = list(row)
 	ident = int(row.pop(1), 16)
 	#srow_data.insert(1,ident)
 	color = int ((ident - int(min(id_list))) * sf)
+	hex_check = 0
 	# classify the color 
 	if color > 510: 
 		style = color - 510
-		style = "#" + str(style) + "0000"
+		hex_check = style
+		style = list(hex(style))
+		style.pop(0)
+		style.pop(0)
+		if(hex_check > 15):
+			style = "#" + style.pop(0) + style.pop(0) + "0000"
+		else: 
+			style = "#0" + style.pop(0) + "0000"
 	elif color > 255:
 		style = color - 255 
-		style = "#00" + str(style) + "00"
+		hex_check = style
+		style = list(hex(style))
+		style.pop(0)
+		style.pop(0)
+
+		if(hex_check > 15):
+			style = "#00" + style.pop(0) + style.pop(0) + "00"
+		else: 
+			style = "#000" + style.pop(0) + "00"			
 	else: 
-		style = "#0000" + str(color)
-	print style
+		style = list(hex(color))
+		hex_check = color
+		style.pop(0)
+		style.pop(0)
+		if(hex_check > 15):
+			style = "#0000" + style.pop(0) + style.pop(0)
+		else: 
+			style = "#00000" + style.pop(0)
+	
 	time = str(row_data.pop(0))
 	ident = str(row_data.pop(0))
 	data = row_data.pop(0)
